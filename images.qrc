@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>pav.jpg</file>
+        <file>road.jpg</file>
+    </qresource>
+</RCC>
