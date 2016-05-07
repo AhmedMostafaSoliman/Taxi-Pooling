@@ -3,7 +3,11 @@
 
 #include <QMainWindow>
 #include <QGridLayout>
-#include "taxicell.h"
+#include "cell.h"
+#include "taxi.h"
+#include "delaythread.h"
+#include "customer.h"
+#include <vector>
 
 namespace Ui {
 class MainWindow;
@@ -15,14 +19,22 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+    //void resizeEvent(QResizeEvent *event);
     ~MainWindow();
-    static const int numRows=5;
-    static const int numCols=5;
-
+    int numRows=20;
+    int numCols=20;
+    void startSimulation();
+    void addTaxi(Taxi * t);
+    DelayThread * thread;
 private:
+    std::vector<Taxi *>taxis;
     Ui::MainWindow *ui;
-    TaxiCell* cells[numRows][numCols];
+    //cell* cells[numRows][numCols];
+    std::vector<std::vector<cell*>>cells;
+    std::queue<Customer *> customers;
     QGridLayout* layout;
+public slots:
+    void onWakeUp();
 };
 
 #endif // MAINWINDOW_H

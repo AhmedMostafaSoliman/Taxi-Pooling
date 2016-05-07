@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+CONFIG   += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -14,10 +15,16 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    taxicell.cpp
+    cell.cpp \
+    taxi.cpp \
+    delaythread.cpp \
+    customer.cpp
 
 HEADERS  += mainwindow.h \
-    taxicell.h
+    cell.h \
+    taxi.h \
+    delaythread.h \
+    customer.h
 
 FORMS    += mainwindow.ui
 
