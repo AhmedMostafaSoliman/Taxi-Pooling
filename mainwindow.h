@@ -8,6 +8,7 @@
 #include "delaythread.h"
 #include "customer.h"
 #include <vector>
+#include "grid.h"
 
 namespace Ui {
 class MainWindow;
@@ -30,7 +31,7 @@ private:
     std::vector<Taxi *>taxis;
     Ui::MainWindow *ui;
     //cell* cells[numRows][numCols];
-    std::vector<std::vector<cell*>>cells;
+    std::vector<std::vector<cell*>> *cells;
     std::queue<Customer *> customers;
     QGridLayout* layout;
 public slots:

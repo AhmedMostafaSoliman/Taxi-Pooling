@@ -18,13 +18,15 @@ SOURCES += main.cpp\
     cell.cpp \
     taxi.cpp \
     delaythread.cpp \
-    customer.cpp
+    customer.cpp \
+    grid.cpp
 
 HEADERS  += mainwindow.h \
     cell.h \
     taxi.h \
     delaythread.h \
-    customer.h
+    customer.h \
+    grid.h
 
 FORMS    += mainwindow.ui
 
