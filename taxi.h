@@ -4,12 +4,14 @@
 #include <queue>
 #include <vector>
 #include "cell.h"
+#include "grid.h"
 class Taxi
 {
     int x,y;
     bool occupied;
     std::stack<char>path;
     char orientation;
+
 public:
     Taxi(int x=0,int y=0);
     bool isOccupied();

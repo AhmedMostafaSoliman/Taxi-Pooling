@@ -39,30 +39,39 @@ bool Taxi::isOccupied()
 
 void Taxi::move()
 {
-    if(path.empty())
+    if(!path.empty())
     {
-        //search
-    }
-    else
-    {
-        path.pop();
         char dir=path.top();
+        path.pop();
+        std::vector<std::vector<cell*>> *cells=Grid::getgrid();
         if(dir== 'r')
         {
-
+            (*cells)[x][y]->setState(cell :: Road);
+            y++;
+            (*cells)[x][y]->setState(cell :: Taxi);
         }
         else if(dir == 'l')
         {
+            (*cells)[x][y]->setState(cell :: Road);
+            y--;
+            (*cells)[x][y]->setState(cell :: Taxi);
 
         }
         else if(dir == 'u')
         {
+            (*cells)[x][y]->setState(cell :: Road);
+            x--;
+            (*cells)[x][y]->setState(cell :: Taxi);
+
 
         }
         else if(dir == 'd')
         {
-
+            (*cells)[x][y]->setState(cell :: Road);
+            x++;
+            (*cells)[x][y]->setState(cell :: Taxi);
         }
+
     }
 }
 

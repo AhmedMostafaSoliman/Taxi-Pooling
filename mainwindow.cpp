@@ -49,39 +49,9 @@ void MainWindow::onWakeUp()
 {
     for(auto i:taxis)
     {
-        char dir=i->getNextMove();
-        if(dir== 'r')
-        {
-            (*cells)[i->getx()][i->gety()]->setState(cell :: Road);
-            i->sety(i->gety()+1);
-            i->move();
-            (*cells)[i->getx()][i->gety()]->setState(cell :: Taxi);
-        }
-        else if(dir == 'l')
-        {
-            (*cells)[i->getx()][i->gety()]->setState(cell :: Road);
-            i->sety(i->gety()-1);
-            i->move();
-            (*cells)[i->getx()][i->gety()]->setState(cell :: Taxi);
-
-        }
-        else if(dir == 'u')
-        {
-            (*cells)[i->getx()][i->gety()]->setState(cell :: Road);
-            i->setx(i->getx()-1);
-            i->move();
-            (*cells)[i->getx()][i->gety()]->setState(cell :: Taxi);
-
-        }
-        else if(dir == 'd')
-        {
-            (*cells)[i->getx()][i->gety()]->setState(cell :: Road);
-            i->setx(i->getx()+1);
-            i->move();
-            (*cells)[i->getx()][i->gety()]->setState(cell :: Taxi);
-        }
+        i->move();
         /*
-        */
+       */
     }
 }
 
