@@ -5,8 +5,11 @@ cell::cell (QWidget *parent) : QLabel (parent),
 {
     ImageUpd();
 }
+
 cell::State cell::getState() { return currentState; }
 bool cell::isRoad() { return currentState==cell::Road; }
+bool cell::isPavement(){return currentState==cell::Pavement;}
+
 
 void cell::setState(State newState)
 {

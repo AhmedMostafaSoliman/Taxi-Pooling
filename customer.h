@@ -4,7 +4,7 @@
 class Customer
 {
 public:
-    Customer(int curx,int cury,int desx , int desy);
+    Customer(int curx=0,int cury=0,int desx=0, int desy=0);
     int getCurrentX() {return this->curx;}
     int getCurrentY() {return this->cury;}
     int getDestinationX() {return this->desx;}

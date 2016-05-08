@@ -1,40 +1,12 @@
 #include "taxi.h"
 #include <QDebug>
 
-char Taxi::getNextMove()
-{
- return path.top();
-}
-
-int Taxi::getx()
-{
-    return x;
-}
-
-int Taxi::gety()
-{
-    return y;
-}
-
-void Taxi::setx(int x)
-{
-    this->x=x;
-}
-
-void Taxi::sety(int y)
-{
-    this->y=y;
-}
 Taxi::Taxi(int x,int y)
 {
     this->x=x;
     this->y=y;
     occupied=0;
-}
-
-bool Taxi::isOccupied()
-{
-    return occupied;
+    customerLocationx=customerLocationy=customerDestinationx=customerDestinationy=-1;
 }
 
 void Taxi::move()
@@ -71,16 +43,28 @@ void Taxi::move()
             x++;
             (*cells)[x][y]->setState(cell :: Taxi);
         }
-
+        else if(dir=='x')
+        {
+            //find path to destination2
+            //if()
+            path=findPath(customerDestinationx,customerDestinationy);
+            (*cells)[customerLocationx][customerLocationy]->setState(cell :: Pavement);
+        }
+    }
+    else
+    {
+        customerLocationx=customerLocationy=customerDestinationx=customerDestinationy=-1;
+        occupied=0;
     }
 }
 
-std::stack<char> Taxi::findPath(int desx,int desy,std::vector<std::vector<cell*>> v)
+std::stack<char> Taxi::findPath(int desx,int desy)
 {
    std::stack<char> taxi_path;
+   std::vector<std::vector<cell*>>* g=Grid::getgrid();
+   std::vector<std::vector<cell*>> v=*g;
    int numRows=v.size();
    int numCols=v[0].size();
-
    std::vector<std::vector<char>>par(numRows,std::vector<char>(numCols,'s'));
    std::vector<std::vector<bool>>vis(numRows,std::vector<bool>(numCols));
 
@@ -91,7 +75,7 @@ std::stack<char> Taxi::findPath(int desx,int desy,std::vector<std::vector<cell*>
    {
        int curx = q.front().first,cury=q.front().second; q.pop();
        vis[curx][cury]=1;
-       qDebug()<<"curx"<<curx<<"cury"<<cury;
+       //qDebug()<<"curx"<<curx<<"cury"<<cury;
 
        /*   r
         * r p r
@@ -99,10 +83,13 @@ std::stack<char> Taxi::findPath(int desx,int desy,std::vector<std::vector<cell*>
         */
        if((abs(curx-desx)+abs(cury-desy))==1)
        {
-           qDebug()<<"done";
+           //qDebug()<<"done";
            while(!q.empty())
                q.pop();
 
+           if(customerLocationx==-1 ||customerLocationy==-1)
+                taxi_path.push('x'); // a char that is used to delay the taxi for a moment when reaching the
+                                        //customer for the first time
            while(par[curx][cury] != 's')
            {
                if(par[curx][cury]=='u')
@@ -160,6 +147,40 @@ std::stack<char> Taxi::findPath(int desx,int desy,std::vector<std::vector<cell*>
 void Taxi::setPath(std::stack<char> p)
 {
     path=p;
+    occupied=1;
 }
 
+int Taxi::getx()
+{
+    return x;
+}
+
+int Taxi::gety()
+{
+    return y;
+}
+
+void Taxi::setx(int x)
+{
+    this->x=x;
+}
+
+void Taxi::sety(int y)
+{
+    this->y=y;
+}
+
+
+void Taxi::setCustomer(int curx,int cury,int desx,int desy)
+{
+    customerLocationx=curx;
+    customerLocationy=cury;
+    customerDestinationx=desx;
+    customerDestinationy=desy;
+}
+
+bool Taxi::isOccupied()
+{
+    return occupied;
+}
 

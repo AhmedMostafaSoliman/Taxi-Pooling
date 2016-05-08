@@ -10,6 +10,7 @@ public:
     cell (QWidget *parent = 0) ;
     State getState();
     bool isRoad();
+    bool isPavement();
     void setState(State newState);
 
 private:

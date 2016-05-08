@@ -25,7 +25,8 @@ public:
     int numRows=20;
     int numCols=20;
     void startSimulation();
-    void addTaxi(Taxi * t);
+    void addTaxi(int x,int y);
+    void addCustomer(int curx,int cury,int desx,int desy);
     DelayThread * thread;
 private:
     std::vector<Taxi *>taxis;

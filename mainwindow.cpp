@@ -20,11 +20,15 @@ MainWindow::MainWindow(QWidget *parent) :
             layout->addWidget(tcell, i, j);
         }
     }
-     (*cells)[1][1]->setState(cell :: Pavement);
-     (*cells)[1][2]->setState(cell :: Pavement);
+     (*cells)[10][10]->setState(cell :: Pavement);
+     (*cells)[5][2]->setState(cell :: Pavement);
      (*cells)[2][1]->setState(cell :: Pavement);
      (*cells)[3][1]->setState(cell :: Pavement);
-     (*cells)[7][7]->setState(cell:: Customer);
+    (*cells)[1][1]->setState(cell :: Pavement);
+    (*cells)[5][5]->setState(cell :: Pavement);
+    (*cells)[17][11]->setState(cell :: Pavement);
+    (*cells)[13][8]->setState(cell :: Pavement);
+   (*cells)[8][13]->setState(cell :: Pavement);
 
      layout->setSpacing(0);
      thread =new DelayThread(this);
@@ -37,21 +41,57 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::startSimulation()
 {
-    int x=0,y=0;
-    taxis.push_back(new Taxi(x,y));
-    (*cells)[x][y]->setState(cell :: Taxi);
-    customers.push(new Customer(10,10,1,1));
-    (*cells)[10][10]->setState(cell:: Customer);
-    taxis[0]->setPath(taxis[0]->findPath(10,10,*cells));
+    addTaxi(15,15);
+    addTaxi(0,0);
+    addTaxi(8,7);
+    addCustomer(10,10,1,1);
+    addCustomer(5,2,1,1);
+    addCustomer(3,1,1,1);
+    addCustomer(5,5,17,11);
+    addCustomer(13,8,8,13);
 }
 
 void MainWindow::onWakeUp()
 {
-    for(auto i:taxis)
+    while(!customers.empty())
     {
-        i->move();
-        /*
-       */
+        Customer * curcustomer=customers.front();
+        int bestTaxi=-1;
+        std::stack<char>curpath,bestpath;
+        for(int i=0;i<taxis.size();i++)
+        {
+            if(!taxis[i]->isOccupied())
+            {
+                curpath=taxis[i]->findPath(curcustomer->getCurrentX(),curcustomer->getCurrentY());
+                if(bestpath.size()==0)
+                {
+                    bestpath=curpath;
+                    bestTaxi=i;
+                }
+                else if(bestpath.size()>curpath.size())
+                {
+                    bestpath=curpath;
+                    bestTaxi=i;
+                }
+            }
+        }
+
+        qDebug()<<curcustomer->getCurrentX()<<" y "<<curcustomer->getCurrentY()<<" "<<bestTaxi;//<<std::endl;
+        if(bestTaxi!=-1)
+        {
+            customers.pop();
+            taxis[bestTaxi]->setPath(bestpath);
+            taxis[bestTaxi]->setCustomer(curcustomer->getCurrentX(),curcustomer->getCurrentY(),curcustomer->getDestinationX(),curcustomer->getDestinationY());
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    for(auto t:taxis)
+    {
+        t->move();
     }
 }
 
@@ -60,9 +100,22 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::addTaxi(Taxi * t)
+void MainWindow::addTaxi(int x,int y)
 {
-    taxis.push_back(t);
+    if((*cells)[x][y]->isRoad())
+    {
+        taxis.push_back(new Taxi(x,y));
+        (*cells)[x][y]->setState(cell:: Taxi);
+    }
+}
+
+void MainWindow::addCustomer(int curx,int cury,int desx,int desy)
+{
+    if((*cells)[curx][cury]->isPavement() && (*cells)[desx][desy]->isPavement())
+    {
+        customers.push(new Customer(curx,cury,desx,desy));
+        (*cells)[curx][cury]->setState(cell:: Customer);
+    }
 }
 
 /*void MainWindow::resizeEvent(QResizeEvent *event)
