@@ -24,6 +24,9 @@ private:
     QPixmap pavPixmap;
     QPixmap taxiPixmap;
     QPixmap customerPixmap;
+    QPixmap occupiedTaxiPixmap;
+    QPixmap vacantTaxiPixmap;
+    QPixmap reservedTaxiPixmap;
 };
 
 #endif // CELL_H

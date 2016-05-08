@@ -8,19 +8,15 @@ cell::cell (QWidget *parent) : QLabel (parent),
     pavPixmap = QPixmap(":/images/pav.jpg");
     taxiPixmap = QPixmap(":/images/taxi.png");
     customerPixmap = QPixmap(":/images/customer.png");
+    occupiedTaxiPixmap = QPixmap(":/images/occupied_taxi.png");
+    vacantTaxiPixmap = QPixmap(":/images/taxi.png");
+    reservedTaxiPixmap = QPixmap(":/images/reserved_taxi.png");
     current_width=128,current_height=128;
     ImageUpd(current_width,current_height);
 }
 
 void cell::ImageUpd(double w,double h)
 {
-    QPixmap roadPixmap(":/images/road.jpg");
-    QPixmap pavPixmap(":/images/pav.jpg");
-    QPixmap customerPixmap(":/images/customer.png");
-    QPixmap occupiedTaxiPixmap(":/images/occupied_taxi.png");
-    QPixmap vacantTaxiPixmap(":/images/taxi.png");
-    QPixmap reservedTaxiPixmap(":/images/reserved_taxi.png");
-
     current_height=h,current_width=w;
     switch (currentState)
     {
@@ -32,8 +28,6 @@ void cell::ImageUpd(double w,double h)
         case ReservedTaxi: setPixmap(reservedTaxiPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
     }
 }
-
-
 
 void cell::setState(State newState)
 {
