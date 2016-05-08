@@ -7,6 +7,7 @@ Taxi::Taxi(int x,int y)
     this->y=y;
     occupied=0;
     customerLocationx=customerLocationy=customerDestinationx=customerDestinationy=-1;
+    orientation='l';
 }
 
 void Taxi::move()
@@ -21,13 +22,38 @@ void Taxi::move()
             (*cells)[x][y]->setState(cell :: Road);
             y++;
             (*cells)[x][y]->setState(cell :: Taxi);
+            if(orientation=='u')
+            {
+                (*cells)[x][y]->rotateLabel(false);
+            }
+            else if(orientation=='d')
+            {
+                (*cells)[x][y]->rotateLabel(true);
+            }
+            else if(orientation=='l')
+            {
+                (*cells)[x][y]->rotateLabel(true);
+                (*cells)[x][y]->rotateLabel(true);
+            }
         }
         else if(dir == 'l')
         {
             (*cells)[x][y]->setState(cell :: Road);
             y--;
             (*cells)[x][y]->setState(cell :: Taxi);
-
+            if(orientation=='u')
+            {
+                (*cells)[x][y]->rotateLabel(true);
+            }
+            else if(orientation=='d')
+            {
+                (*cells)[x][y]->rotateLabel(false);
+            }
+            else if(orientation=='r')
+            {
+                (*cells)[x][y]->rotateLabel(true);
+                (*cells)[x][y]->rotateLabel(true);
+            }
         }
         else if(dir == 'u')
         {
@@ -35,13 +61,39 @@ void Taxi::move()
             x--;
             (*cells)[x][y]->setState(cell :: Taxi);
 
-
+            if(orientation=='l')
+            {
+                (*cells)[x][y]->rotateLabel(false);
+            }
+            else if(orientation=='r')
+            {
+                (*cells)[x][y]->rotateLabel(true);
+            }
+            else if(orientation=='d')
+            {
+                (*cells)[x][y]->rotateLabel(true);
+                (*cells)[x][y]->rotateLabel(true);
+            }
         }
         else if(dir == 'd')
         {
             (*cells)[x][y]->setState(cell :: Road);
             x++;
             (*cells)[x][y]->setState(cell :: Taxi);
+
+            if(orientation=='l')
+            {
+                (*cells)[x][y]->rotateLabel(true);
+            }
+            else if(orientation=='r')
+            {
+                (*cells)[x][y]->rotateLabel(false);
+            }
+            else if(orientation=='u')
+            {
+                (*cells)[x][y]->rotateLabel(true);
+                (*cells)[x][y]->rotateLabel(true);
+            }
         }
         else if(dir=='x')
         {

@@ -12,7 +12,7 @@ public:
     bool isRoad();
     bool isPavement();
     void setState(State newState);
-
+    void rotateLabel(bool clockwise);
 private:
     void ImageUpd();
     State currentState;

@@ -36,6 +36,18 @@ void cell::ImageUpd()
         case Road: setPixmap(roadPixmap.scaled(w,h,Qt::KeepAspectRatio)); break;
         case Taxi:  setPixmap(taxiPixmap.scaled(w,h,Qt::KeepAspectRatio)); break;
         case Customer:  setPixmap(customerPixmap.scaled(w,h,Qt::KeepAspectRatio)); break;
-
     }
+    //rotateLabel(true);
+}
+
+void cell::rotateLabel(bool clockwise)
+{
+    QMatrix rm;
+    int angle;
+    if(clockwise)
+        angle=-90;
+    else
+        angle=90;
+    rm.rotate(angle);
+    setPixmap(this->pixmap()->transformed(rm));
 }
