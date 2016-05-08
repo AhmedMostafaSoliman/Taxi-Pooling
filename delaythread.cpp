@@ -9,7 +9,7 @@ void DelayThread::run()
 {
     while(1)
     {
-        this->msleep(1000);
+        this->msleep(500);
         emit wakeUp();
     }
 }
