@@ -27,6 +27,12 @@ private:
     QPixmap occupiedTaxiPixmap;
     QPixmap vacantTaxiPixmap;
     QPixmap reservedTaxiPixmap;
+
+signals:
+   void clicked();
+protected:
+   void mousePressEvent(QMouseEvent*);
+
 };
 
 #endif // CELL_H

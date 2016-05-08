@@ -3,6 +3,9 @@
 #include <iostream>
 #include <QDebug>
 #include <QResizeEvent>
+#include <QSignalMapper>:
+
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -10,27 +13,36 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     layout = new QGridLayout;
 
-    cells=Grid::getgrid();
+    QSignalMapper* signalMapper = new QSignalMapper (this) ;
 
+    cells=Grid::getgrid();
+    int counter=0;
     for (int i = 0; i < numCols; i++) {
         for (int j = 0; j < numRows; j++) {
+            cellMap[counter]={i,j};
             cell* tcell = new cell (this);
             (*cells)[i][j] = tcell;
+            connect(tcell,SIGNAL(clicked()),signalMapper,SLOT(map()));
+            signalMapper -> setMapping (tcell, counter) ;
+
             tcell->setScaledContents(1);
             tcell->setMinimumSize(1,1);
             layout->addWidget(tcell, i, j);
-
+            counter++;
         }
     }
-     (*cells)[10][10]->setState(cell :: Pavement);
-     (*cells)[5][2]->setState(cell :: Pavement);
-     (*cells)[2][1]->setState(cell :: Pavement);
-     (*cells)[3][1]->setState(cell :: Pavement);
+
+    connect (signalMapper, SIGNAL(mapped(int)), this, SLOT(onCellClick(int))) ;
+
+    (*cells)[10][10]->setState(cell :: Pavement);
+    (*cells)[5][2]->setState(cell :: Pavement);
+    (*cells)[2][1]->setState(cell :: Pavement);
+    (*cells)[3][1]->setState(cell :: Pavement);
     (*cells)[1][1]->setState(cell :: Pavement);
     (*cells)[5][5]->setState(cell :: Pavement);
     (*cells)[17][11]->setState(cell :: Pavement);
     (*cells)[13][8]->setState(cell :: Pavement);
-   (*cells)[8][13]->setState(cell :: Pavement);
+    (*cells)[8][13]->setState(cell :: Pavement);
 
      layout->setSpacing(0);
      thread =new DelayThread(this);
@@ -41,16 +53,31 @@ MainWindow::MainWindow(QWidget *parent) :
      startSimulation();
 }
 
+
 void MainWindow::startSimulation()
 {
     addTaxi(15,15);
     addTaxi(0,0);
     addTaxi(8,7);
-    addCustomer(10,10,1,1);
-    addCustomer(5,2,1,1);
-    addCustomer(3,1,1,1);
-    addCustomer(5,5,17,11);
-    addCustomer(13,8,8,13);
+}
+
+void MainWindow::onCellClick(int c){
+    int x=cellMap[c].first;
+    int y=cellMap[c].second;
+    if(!f){
+        if((*cells)[x][y]->isPavement())
+        {
+            (*cells)[x][y]->setState(cell:: Customer);
+            startx=x;
+            starty=y;
+            f=1;
+        }
+    }else{
+        if((*cells)[x][y]->isPavement()){
+            addCustomer(startx,starty,x,y);
+            f=0;
+        }
+    }
 }
 
 void MainWindow::onWakeUp()
@@ -113,11 +140,7 @@ void MainWindow::addTaxi(int x,int y)
 
 void MainWindow::addCustomer(int curx,int cury,int desx,int desy)
 {
-    if((*cells)[curx][cury]->isPavement() && (*cells)[desx][desy]->isPavement())
-    {
-        customers.push(new Customer(curx,cury,desx,desy));
-        (*cells)[curx][cury]->setState(cell:: Customer);
-    }
+    customers.push(new Customer(curx,cury,desx,desy));
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event){
