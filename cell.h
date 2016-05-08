@@ -6,7 +6,7 @@ class cell : public QLabel
 {
     Q_OBJECT
 public:
-    enum State {Pavement, Road , VacantTaxi ,OccupiedTaxi, Customer};
+    enum State {Pavement, Road , VacantTaxi ,OccupiedTaxi, ReservedTaxi, Customer};
     cell (QWidget *parent = 0) ;
     State getState();
     bool isRoad();

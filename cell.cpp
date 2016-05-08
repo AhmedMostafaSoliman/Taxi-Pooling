@@ -30,8 +30,9 @@ void cell::ImageUpd(double w,double h)
     QPixmap roadPixmap(":/images/road.jpg");
     QPixmap pavPixmap(":/images/pav.jpg");
     QPixmap customerPixmap(":/images/customer.png");
-    QPixmap occupiedTaxiPixmap(":/images/taxi_occupied.png");
-    QPixmap vacantTaxiPixmap(":/images/taxi_vacant.png");
+    QPixmap occupiedTaxiPixmap(":/images/occupied_taxi.png");
+    QPixmap vacantTaxiPixmap(":/images/taxi.png");
+    QPixmap reservedTaxiPixmap(":/images/reserved_taxi.png");
 
 
 
@@ -43,6 +44,7 @@ void cell::ImageUpd(double w,double h)
         case Customer:  setPixmap(customerPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
         case OccupiedTaxi: setPixmap(occupiedTaxiPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
         case VacantTaxi:setPixmap(vacantTaxiPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
+        case ReservedTaxi: setPixmap(reservedTaxiPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
 
     }
     //rotateLabel(true);   
