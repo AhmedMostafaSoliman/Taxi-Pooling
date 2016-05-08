@@ -54,4 +54,3 @@ int cell::getCellWidth() { return current_width;}
 cell::State cell::getState() { return currentState; }
 bool cell::isRoad() { return currentState==cell::Road; }
 bool cell::isPavement(){return currentState==cell::Pavement;}
-

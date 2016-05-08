@@ -17,7 +17,6 @@ void Taxi::move()
     {
         char dir=path.top();
         path.pop();
-
         if(dir== 'r')
         {
             (*cells)[x][y]->setState(cell :: Road);
@@ -42,9 +41,6 @@ void Taxi::move()
                 (*cells)[x][y]->setState(cell :: OccupiedTaxi);
             else
                 (*cells)[x][y]->setState(cell :: VacantTaxi);
-
-
-
         }
         else if(dir == 'u')
         {
@@ -57,9 +53,7 @@ void Taxi::move()
             else
                 (*cells)[x][y]->setState(cell :: VacantTaxi);
 
-
             (*cells)[x][y]->rotateLabel(false);
-
         }
         else if(dir == 'd')
         {
@@ -72,9 +66,7 @@ void Taxi::move()
             else
                 (*cells)[x][y]->setState(cell :: VacantTaxi);
 
-
             (*cells)[x][y]->rotateLabel(true);
-
         }
         else if(dir=='x')
         {
@@ -94,7 +86,6 @@ void Taxi::move()
             {
                 (*cells)[x][y]->rotateLabel(false);
             }
-
             customerLocationx=customerLocationy=customerDestinationx=customerDestinationy=-1;
             occupied=1;
         }
@@ -120,7 +111,6 @@ void Taxi::move()
                 (*cells)[x][y]->rotateLabel(false);
             }
         }
-
     }
 }
 
@@ -130,30 +120,25 @@ std::stack<char> Taxi::findPath(int desx,int desy)
    std::vector<std::vector<cell*>> v=*Grid::getgrid();
    int numRows=v.size();
    int numCols=v[0].size();
+
    std::vector<std::vector<char>>par(numRows,std::vector<char>(numCols,'s'));
-   std::vector<std::vector<bool>>vis(numRows,std::vector<bool>(numCols));
+   par[x][y]='T';
 
-   std::queue<std::pair<int,int>>q;
-   q.push(std::make_pair(this->x,this->y));
+   std::queue<std::pair<int,int>>BFS_Q;
+   BFS_Q.push(std::make_pair(this->x,this->y));
 
-   while(!q.empty())
+   while(!BFS_Q.empty())
    {
-       int curx = q.front().first,cury=q.front().second; q.pop();
-       vis[curx][cury]=1;
-
-       /*   r
-        * r p r
-        *   r
-        */
+       int curx = BFS_Q.front().first,cury=BFS_Q.front().second; BFS_Q.pop();
        if((abs(curx-desx)+abs(cury-desy))==1)
        {
-           while(!q.empty())
-               q.pop();
+           while(!BFS_Q.empty())
+               BFS_Q.pop();
 
            if(customerLocationx==-1 ||customerLocationy==-1)
                 taxi_path.push('x'); // a char that is used to delay the taxi for a moment when reaching the
                                         //customer for the first time
-           while(par[curx][cury] != 's')
+           while(par[curx][cury] != 'T')
            {
                if(par[curx][cury]=='u')
                {
@@ -181,26 +166,26 @@ std::stack<char> Taxi::findPath(int desx,int desy)
 
        if(curx+1 <numRows)
        {
-           if(!vis[curx+1][cury] && v[curx+1][cury]->isRoad()){
-               q.push(std::make_pair(curx+1,cury)); par[curx+1][cury]='d';
+           if(par[curx+1][cury]=='s' && v[curx+1][cury]->isRoad()){
+               BFS_Q.push(std::make_pair(curx+1,cury)); par[curx+1][cury]='d';
            }
        }
        if(curx-1 >=0)
        {
-           if(!vis[curx-1][cury] && v[curx-1][cury]->isRoad()){
-               q.push(std::make_pair(curx-1,cury)); par[curx-1][cury]='u';
+           if(par[curx-1][cury]=='s' && v[curx-1][cury]->isRoad()){
+               BFS_Q.push(std::make_pair(curx-1,cury)); par[curx-1][cury]='u';
            }
        }
        if(cury+1 <numCols)
        {
-           if(!vis[curx][cury+1] && v[curx][cury+1]->isRoad()){
-               q.push(std::make_pair(curx,cury+1));par[curx][cury+1]='r';
+           if(par[curx][cury+1]=='s' && v[curx][cury+1]->isRoad()){
+               BFS_Q.push(std::make_pair(curx,cury+1));par[curx][cury+1]='r';
            }
        }
        if(cury-1 >=0)
        {
-           if(!vis[curx][cury-1] && v[curx][cury-1]->isRoad()){
-               q.push(std::make_pair(curx,cury-1));par[curx][cury-1]='l';
+           if(par[curx][cury-1]=='s' && v[curx][cury-1]->isRoad()){
+               BFS_Q.push(std::make_pair(curx,cury-1));par[curx][cury-1]='l';
            }
        }
 
@@ -233,7 +218,6 @@ void Taxi::sety(int y)
 {
     this->y=y;
 }
-
 
 void Taxi::setCustomer(int curx,int cury,int desx,int desy)
 {
