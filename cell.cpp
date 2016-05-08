@@ -1,5 +1,6 @@
 #include "cell.h"
 #include <QDebug>
+
 cell::cell (QWidget *parent) : QLabel (parent),
     currentState (Road)
 {
@@ -11,9 +12,27 @@ cell::cell (QWidget *parent) : QLabel (parent),
     ImageUpd(current_width,current_height);
 }
 
-cell::State cell::getState() { return currentState; }
-bool cell::isRoad() { return currentState==cell::Road; }
-bool cell::isPavement(){return currentState==cell::Pavement;}
+void cell::ImageUpd(double w,double h)
+{
+    QPixmap roadPixmap(":/images/road.jpg");
+    QPixmap pavPixmap(":/images/pav.jpg");
+    QPixmap customerPixmap(":/images/customer.png");
+    QPixmap occupiedTaxiPixmap(":/images/occupied_taxi.png");
+    QPixmap vacantTaxiPixmap(":/images/taxi.png");
+    QPixmap reservedTaxiPixmap(":/images/reserved_taxi.png");
+
+    current_height=h,current_width=w;
+    switch (currentState)
+    {
+        case Pavement: setPixmap(pavPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
+        case Road: setPixmap(roadPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
+        case Customer:  setPixmap(customerPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
+        case OccupiedTaxi: setPixmap(occupiedTaxiPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
+        case VacantTaxi:setPixmap(vacantTaxiPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
+        case ReservedTaxi: setPixmap(reservedTaxiPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
+    }
+}
+
 
 
 void cell::setState(State newState)
@@ -25,44 +44,20 @@ void cell::setState(State newState)
     }
 }
 
-void cell::ImageUpd(double w,double h)
-{
-    QPixmap roadPixmap(":/images/road.jpg");
-    QPixmap pavPixmap(":/images/pav.jpg");
-    QPixmap customerPixmap(":/images/customer.png");
-    QPixmap occupiedTaxiPixmap(":/images/occupied_taxi.png");
-    QPixmap vacantTaxiPixmap(":/images/taxi.png");
-    QPixmap reservedTaxiPixmap(":/images/reserved_taxi.png");
-
-
-
-    current_height=h,current_width=w;
-    switch (currentState)
-    {
-        case Pavement: setPixmap(pavPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
-        case Road: setPixmap(roadPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
-        case Customer:  setPixmap(customerPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
-        case OccupiedTaxi: setPixmap(occupiedTaxiPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
-        case VacantTaxi:setPixmap(vacantTaxiPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
-        case ReservedTaxi: setPixmap(reservedTaxiPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
-
-    }
-    //rotateLabel(true);   
-    //qDebug()<<"w"<<w<<"h"<<h;
-}
 
 void cell::rotateLabel(bool clockwise)
 {
     QMatrix rm;
     int angle;
-    if(clockwise)
-        angle=-90;
-    else
-        angle=90;
+    if(clockwise) angle=-90;
+    else angle=90;
     rm.rotate(angle);
     setPixmap(this->pixmap()->transformed(rm));
 }
 
 int cell::getCellHeight() {return current_height;}
 int cell::getCellWidth() { return current_width;}
+cell::State cell::getState() { return currentState; }
+bool cell::isRoad() { return currentState==cell::Road; }
+bool cell::isPavement(){return currentState==cell::Pavement;}
 

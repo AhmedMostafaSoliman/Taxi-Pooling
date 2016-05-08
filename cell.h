@@ -9,12 +9,12 @@ public:
     enum State {Pavement, Road , VacantTaxi ,OccupiedTaxi, ReservedTaxi, Customer};
     cell (QWidget *parent = 0) ;
     State getState();
-    bool isRoad();
-    bool isPavement();
-    void setState(State newState);
-    void rotateLabel(bool clockwise);
     int  getCellWidth();
     int  getCellHeight();
+    void setState(State newState);
+    bool isRoad();
+    bool isPavement();
+    void rotateLabel(bool clockwise);
     void ImageUpd(double w,double h);
 
 private:
