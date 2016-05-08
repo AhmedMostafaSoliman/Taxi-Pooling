@@ -1,9 +1,14 @@
 #include "cell.h"
-
+#include <QDebug>
 cell::cell (QWidget *parent) : QLabel (parent),
     currentState (Road)
 {
-    ImageUpd();
+    roadPixmap= QPixmap(":/images/road.jpg");
+    pavPixmap = QPixmap(":/images/pav.jpg");
+    taxiPixmap = QPixmap(":/images/taxi.png");
+    customerPixmap = QPixmap(":/images/customer.png");
+    current_width=128,current_height=128;
+    ImageUpd(current_width,current_height);
 }
 
 cell::State cell::getState() { return currentState; }
@@ -16,11 +21,11 @@ void cell::setState(State newState)
     if (currentState != newState)
     {
         currentState = newState;
-        ImageUpd();
+        ImageUpd(current_width,current_height);
     }
 }
 
-void cell::ImageUpd()
+void cell::ImageUpd(double w,double h)
 {
     QPixmap roadPixmap(":/images/road.jpg");
     QPixmap pavPixmap(":/images/pav.jpg");
@@ -31,15 +36,18 @@ void cell::ImageUpd()
 
     int w=128,h=128;
 
+    current_height=h,current_width=w;
     switch (currentState)
     {
-        case Pavement: setPixmap(pavPixmap.scaled(w,h,Qt::KeepAspectRatio)); break;
-        case Road: setPixmap(roadPixmap.scaled(w,h,Qt::KeepAspectRatio)); break;
-        case Customer:  setPixmap(customerPixmap.scaled(w,h,Qt::KeepAspectRatio)); break;
-        case OccupiedTaxi: setPixmap(occupiedTaxiPixmap.scaled(w,h,Qt::KeepAspectRatio)); break;
-        case VacantTaxi:setPixmap(vacantTaxiPixmap.scaled(w,h,Qt::KeepAspectRatio)); break;
+        case Pavement: setPixmap(pavPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
+        case Road: setPixmap(roadPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
+        case Customer:  setPixmap(customerPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
+        case OccupiedTaxi: setPixmap(occupiedTaxiPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
+        case VacantTaxi:setPixmap(vacantTaxiPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
+
     }
-    //rotateLabel(true);
+    //rotateLabel(true);   
+    //qDebug()<<"w"<<w<<"h"<<h;
 }
 
 void cell::rotateLabel(bool clockwise)
@@ -53,3 +61,7 @@ void cell::rotateLabel(bool clockwise)
     rm.rotate(angle);
     setPixmap(this->pixmap()->transformed(rm));
 }
+
+int cell::getCellHeight() {return current_height;}
+int cell::getCellWidth() { return current_width;}
+

@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 #include <iostream>
 #include <QDebug>
-
+#include <QResizeEvent>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
             cell* tcell = new cell (this);
             (*cells)[i][j] = tcell;
             tcell->setScaledContents(1);
+            tcell->setMinimumSize(1,1);
             layout->addWidget(tcell, i, j);
 
         }
@@ -77,7 +78,7 @@ void MainWindow::onWakeUp()
             }
         }
 
-        qDebug()<<curcustomer->getCurrentX()<<" y "<<curcustomer->getCurrentY()<<" "<<bestTaxi;//<<std::endl;
+        //qDebug()<<curcustomer->getCurrentX()<<" y "<<curcustomer->getCurrentY()<<" "<<bestTaxi;//<<std::endl;
         if(bestTaxi!=-1)
         {
             customers.pop();
@@ -119,19 +120,20 @@ void MainWindow::addCustomer(int curx,int cury,int desx,int desy)
     }
 }
 
-/*void MainWindow::resizeEvent(QResizeEvent *event)
-{
+void MainWindow::resizeEvent(QResizeEvent *event){
 
     QSize oldSize = event->oldSize();
     QSize actualSize = event->size();
+    double mul = actualSize.height()*1.0/oldSize.height();
+    if(mul <=0) mul=1;
 
-    if(ui->label->isVisible())
-    {
+    qDebug()<<"mul"<<mul;
+    for (int i = 0; i < numCols; i++)
+        for (int j = 0; j < numRows; j++)
+                (*cells)[i][j]->ImageUpd((*cells)[i][j]->getCellWidth()/mul , (*cells)[i][j]->getCellHeight()/mul);
 
-    double width = actualSize.width() / (double)oldSize.width(),
-    height = actualSize.height() / (double)oldSize.height();
+    qDebug()<<"new cell width"<<(*cells)[0][0]->getCellWidth()/mul<<"new cell height"<< (*cells)[0][0]->getCellHeight()/mul;
 
-    cells[0][0]->resize(ui->label->size().width() * width,
-                      ui->label->size().height() * height);
-    }
-}*/
+}
+
+
