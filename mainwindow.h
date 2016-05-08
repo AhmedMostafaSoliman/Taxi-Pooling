@@ -28,7 +28,8 @@ public:
     void addCustomer(int curx,int cury,int desx,int desy);
     int startx;
     int starty;
-    bool f=0;
+    bool firstStep=1;
+    bool allTaxisAreVacant();
     DelayThread * thread;
     std::map<int,std::pair<int,int>>cellMap;
 private:
@@ -43,6 +44,8 @@ public slots:
     void onCellClick(int c);
     void resizeEvent(QResizeEvent *event);
 
+private slots:
+    void on_CustomerRadioButton_toggled(bool checked);
 };
 
 #endif // MAINWINDOW_H

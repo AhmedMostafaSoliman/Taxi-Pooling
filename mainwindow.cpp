@@ -34,15 +34,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect (signalMapper, SIGNAL(mapped(int)), this, SLOT(onCellClick(int))) ;
 
-    (*cells)[10][10]->setState(cell :: Pavement);
-    (*cells)[5][2]->setState(cell :: Pavement);
-    (*cells)[2][1]->setState(cell :: Pavement);
-    (*cells)[3][1]->setState(cell :: Pavement);
-    (*cells)[1][1]->setState(cell :: Pavement);
-    (*cells)[5][5]->setState(cell :: Pavement);
-    (*cells)[17][11]->setState(cell :: Pavement);
-    (*cells)[13][8]->setState(cell :: Pavement);
-    (*cells)[8][13]->setState(cell :: Pavement);
+    (*cells)[3][4]->setState(cell :: Pavement);
+    (*cells)[3][15]->setState(cell :: Pavement);
+    (*cells)[15][4]->setState(cell :: Pavement);
+    (*cells)[15][15]->setState(cell :: Pavement);
 
      layout->setSpacing(0);
      thread =new DelayThread(this);
@@ -56,28 +51,47 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::startSimulation()
 {
-    addTaxi(15,15);
     addTaxi(0,0);
-    addTaxi(8,7);
 }
 
 void MainWindow::onCellClick(int c){
     int x=cellMap[c].first;
     int y=cellMap[c].second;
-    if(!f){
-        if((*cells)[x][y]->isPavement())
-        {
-            (*cells)[x][y]->setState(cell:: Customer);
-            startx=x;
-            starty=y;
-            f=1;
+    if(ui->CustomerRadioButton->isChecked()){
+        if(firstStep){
+            if((*cells)[x][y]->isPavement())
+            {
+                (*cells)[x][y]->setState(cell:: Customer);
+                startx=x;
+                starty=y;
+                firstStep=0;
+            }
+        }else{
+            if((*cells)[x][y]->isPavement()){
+                addCustomer(startx,starty,x,y);
+                firstStep=1;
+            }
         }
-    }else{
-        if((*cells)[x][y]->isPavement()){
-            addCustomer(startx,starty,x,y);
-            f=0;
+    }else if(ui->PavementRadioButton->isChecked()){
+        if(allTaxisAreVacant()&&(*cells)[x][y]->isRoad()){
+           (*cells)[x][y]->setState(cell:: Pavement);
+        }
+    }else if(ui->RoadRadioButton->isChecked()){
+        if(allTaxisAreVacant()&&(*cells)[x][y]->isPavement()){
+           (*cells)[x][y]->setState(cell:: Road);
+        }
+    }else if(ui->taxiRadioButton->isChecked()){
+        if((*cells)[x][y]->isRoad()){
+            addTaxi(x,y);
         }
     }
+}
+
+bool MainWindow::allTaxisAreVacant(){
+    for(auto i:taxis){
+        if(i->isOccupied()) return 0;
+    }
+    return 1;
 }
 
 void MainWindow::onWakeUp()
@@ -160,3 +174,11 @@ void MainWindow::resizeEvent(QResizeEvent *event){
 }
 
 
+
+void MainWindow::on_CustomerRadioButton_toggled(bool checked)
+{
+    if(!firstStep){
+        (*cells)[startx][starty]->setState(cell::Pavement);
+    }
+    firstStep=true;
+}
