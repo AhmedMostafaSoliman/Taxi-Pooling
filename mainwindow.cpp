@@ -105,7 +105,7 @@ void MainWindow::onWakeUp()
         {
             if(!taxis[i]->isOccupied())
             {
-                curpath=taxis[i]->findPath(curcustomer->getCurrentX(),curcustomer->getCurrentY());
+                curpath=taxis[i]->findPath(curcustomer->getCurrentX(),curcustomer->getCurrentY(),0);
                 if(bestpath.size()==0 && curpath.size()>0)
                 {
                     bestpath=curpath;

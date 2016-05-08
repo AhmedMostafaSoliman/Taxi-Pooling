@@ -1,12 +1,12 @@
 #ifndef CELL_H
 #define CELL_H
 #include <QLabel>
-
+#include <QMovie>
 class cell : public QLabel
 {
     Q_OBJECT
 public:
-    enum State {Pavement, Road , VacantTaxi ,OccupiedTaxi, ReservedTaxi, Customer};
+    enum State {Pavement, Road , VacantTaxi ,OccupiedTaxi, ReservedTaxi, Customer , FareAnimationUp,FareAnimationDown ,FareAnimationLeft , FareAnimationRight};
     cell (QWidget *parent = 0) ;
     State getState();
     int  getCellWidth();
@@ -27,6 +27,8 @@ private:
     QPixmap occupiedTaxiPixmap;
     QPixmap vacantTaxiPixmap;
     QPixmap reservedTaxiPixmap;
+    QPixmap farePixmap;
+    QMovie *upFare,*downFare,*rightFare,*leftFare;
 
 signals:
    void clicked();

@@ -6,5 +6,9 @@
         <file>customer.png</file>
         <file>reserved_taxi.png</file>
         <file>occupied_taxi.png</file>
+        <file>down.gif</file>
+        <file>left.gif</file>
+        <file>right.gif</file>
+        <file>up.gif</file>
     </qresource>
 </RCC>

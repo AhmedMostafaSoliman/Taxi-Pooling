@@ -11,6 +11,11 @@ cell::cell (QWidget *parent) : QLabel (parent),
     occupiedTaxiPixmap = QPixmap(":/images/occupied_taxi.png");
     vacantTaxiPixmap = QPixmap(":/images/taxi.png");
     reservedTaxiPixmap = QPixmap(":/images/reserved_taxi.png");
+    upFare =  new QMovie(":/images/up.gif");
+    downFare = new QMovie(":/images/down.gif");
+    leftFare = new QMovie(":/images/left.gif");
+    rightFare = new QMovie(":/images/right.gif");
+
     current_width=128,current_height=128;
     ImageUpd(current_width,current_height);
 }
@@ -26,6 +31,11 @@ void cell::ImageUpd(double w,double h)
         case OccupiedTaxi: setPixmap(occupiedTaxiPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
         case VacantTaxi:setPixmap(vacantTaxiPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
         case ReservedTaxi: setPixmap(reservedTaxiPixmap.scaled(w,h,Qt::KeepAspectRatio,Qt::SmoothTransformation)); break;
+        case FareAnimationUp: qDebug()<<"up";setFixedHeight(size().height()); setFixedWidth(size().width()); setMovie(upFare);  upFare->start(); break;
+        case FareAnimationDown: qDebug()<<"down";setFixedHeight(size().height()); setFixedWidth(size().width()); setMovie(downFare);  downFare->start(); break;
+        case FareAnimationLeft: qDebug()<<"left";setFixedHeight(size().height()); setFixedWidth(size().width()); setMovie(leftFare);  leftFare->start(); break;
+        case FareAnimationRight: qDebug()<<"right";setFixedHeight(size().height()); setFixedWidth(size().width()); setMovie(rightFare);  rightFare->start(); break;
+
     }
 }
 

@@ -70,7 +70,7 @@ void Taxi::move()
         }
         else if(dir=='x')
         {
-            path=findPath(customerDestinationx,customerDestinationy);
+            path=findPath(customerDestinationx,customerDestinationy,1);
             (*cells)[customerLocationx][customerLocationy]->setState(cell :: Pavement);
             (*cells)[x][y]->setState(cell :: OccupiedTaxi);
             if(orientation=='r')
@@ -89,7 +89,20 @@ void Taxi::move()
             customerLocationx=customerLocationy=customerDestinationx=customerDestinationy=-1;
             occupied=1;
         }
-        orientation=dir;
+        else if(dir == 'a')
+        {
+            qDebug()<<" orientation:"<<orientation;
+            if(orientation=='u')
+                (*cells)[x][y]->setState(cell :: FareAnimationUp);
+            else if(orientation == 'd')
+                (*cells)[x][y]->setState(cell :: FareAnimationDown);
+            else if(orientation == 'l')
+                (*cells)[x][y]->setState(cell :: FareAnimationLeft);
+            else if(orientation == 'r')
+                (*cells)[x][y]->setState(cell :: FareAnimationRight);
+        }
+
+        if (dir == 'u' || dir == 'd' || dir=='l' || dir == 'r') orientation = dir;
     }
     else
     {
@@ -114,7 +127,7 @@ void Taxi::move()
     }
 }
 
-std::stack<char> Taxi::findPath(int desx,int desy)
+std::stack<char> Taxi::findPath(int desx,int desy,bool f)
 {
    std::stack<char> taxi_path;
    std::vector<std::vector<cell*>> v=*Grid::getgrid();
@@ -138,6 +151,12 @@ std::stack<char> Taxi::findPath(int desx,int desy)
            if(customerLocationx==-1 ||customerLocationy==-1)
                 taxi_path.push('x'); // a char that is used to delay the taxi for a moment when reaching the
                                         //customer for the first time
+
+           if(f)
+           {
+             taxi_path.push('a'); //character to start animation
+           }
+
            while(par[curx][cury] != 'T')
            {
                if(par[curx][cury]=='u')
@@ -161,6 +180,7 @@ std::stack<char> Taxi::findPath(int desx,int desy)
                     taxi_path.push('r');
                }
             }
+
            return taxi_path;
         }
 

@@ -21,7 +21,7 @@ public:
     Taxi(int x=0,int y=0);
     bool isOccupied();
     void move();
-    std::stack<char>findPath(int desx,int desy);
+    std::stack<char>findPath(int desx,int desy,bool f);
 
     int getx();
     int gety();
