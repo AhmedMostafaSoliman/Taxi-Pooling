@@ -34,7 +34,6 @@ void cell::ImageUpd(double w,double h)
     QPixmap vacantTaxiPixmap(":/images/taxi_vacant.png");
 
 
-    int w=128,h=128;
 
     current_height=h,current_width=w;
     switch (currentState)
