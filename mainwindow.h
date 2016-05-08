@@ -20,7 +20,6 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    //void resizeEvent(QResizeEvent *event);
     ~MainWindow();
     int numRows=20;
     int numCols=20;
@@ -37,6 +36,8 @@ private:
     QGridLayout* layout;
 public slots:
     void onWakeUp();
+    void resizeEvent(QResizeEvent *event);
+
 };
 
 #endif // MAINWINDOW_H

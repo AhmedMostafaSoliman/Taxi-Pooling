@@ -13,9 +13,17 @@ public:
     bool isPavement();
     void setState(State newState);
     void rotateLabel(bool clockwise);
+    int  getCellWidth();
+    int  getCellHeight();
+    void ImageUpd(double w,double h);
+
 private:
-    void ImageUpd();
+    double current_width,current_height;
     State currentState;
+    QPixmap roadPixmap;
+    QPixmap pavPixmap;
+    QPixmap taxiPixmap;
+    QPixmap customerPixmap;
 };
 
 #endif // CELL_H
