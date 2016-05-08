@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
             (*cells)[i][j] = tcell;
             tcell->setScaledContents(1);
             layout->addWidget(tcell, i, j);
+
         }
     }
      (*cells)[10][10]->setState(cell :: Pavement);
@@ -105,7 +106,7 @@ void MainWindow::addTaxi(int x,int y)
     if((*cells)[x][y]->isRoad())
     {
         taxis.push_back(new Taxi(x,y));
-        (*cells)[x][y]->setState(cell:: Taxi);
+        (*cells)[x][y]->setState(cell:: VacantTaxi);
     }
 }
 

@@ -4,5 +4,7 @@
         <file>road.jpg</file>
         <file>taxi.png</file>
         <file>customer.png</file>
+        <file>taxi_vacant.png</file>
+        <file>taxi_occupied.png</file>
     </qresource>
 </RCC>

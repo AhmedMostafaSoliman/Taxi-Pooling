@@ -12,101 +12,93 @@ Taxi::Taxi(int x,int y)
 
 void Taxi::move()
 {
+    std::vector<std::vector<cell*>> *cells=Grid::getgrid();
     if(!path.empty())
     {
         char dir=path.top();
         path.pop();
-        std::vector<std::vector<cell*>> *cells=Grid::getgrid();
         if(dir== 'r')
         {
             (*cells)[x][y]->setState(cell :: Road);
             y++;
-            (*cells)[x][y]->setState(cell :: Taxi);
-            if(orientation=='u')
-            {
-                (*cells)[x][y]->rotateLabel(false);
-            }
-            else if(orientation=='d')
-            {
-                (*cells)[x][y]->rotateLabel(true);
-            }
-            else if(orientation=='l')
-            {
-                (*cells)[x][y]->rotateLabel(true);
-                (*cells)[x][y]->rotateLabel(true);
-            }
+            if(occupied)
+                (*cells)[x][y]->setState(cell :: OccupiedTaxi);
+            else
+                (*cells)[x][y]->setState(cell :: VacantTaxi);
+
+            (*cells)[x][y]->rotateLabel(true);
+            (*cells)[x][y]->rotateLabel(true);
+
+
         }
         else if(dir == 'l')
         {
             (*cells)[x][y]->setState(cell :: Road);
             y--;
-            (*cells)[x][y]->setState(cell :: Taxi);
-            if(orientation=='u')
-            {
-                (*cells)[x][y]->rotateLabel(true);
-            }
-            else if(orientation=='d')
-            {
-                (*cells)[x][y]->rotateLabel(false);
-            }
-            else if(orientation=='r')
-            {
-                (*cells)[x][y]->rotateLabel(true);
-                (*cells)[x][y]->rotateLabel(true);
-            }
+            if(occupied)
+                (*cells)[x][y]->setState(cell :: OccupiedTaxi);
+            else
+                (*cells)[x][y]->setState(cell :: VacantTaxi);
+
+
         }
         else if(dir == 'u')
         {
             (*cells)[x][y]->setState(cell :: Road);
             x--;
-            (*cells)[x][y]->setState(cell :: Taxi);
+            if(occupied)
+                (*cells)[x][y]->setState(cell :: OccupiedTaxi);
+            else
+                (*cells)[x][y]->setState(cell :: VacantTaxi);
 
-            if(orientation=='l')
-            {
-                (*cells)[x][y]->rotateLabel(false);
-            }
-            else if(orientation=='r')
-            {
-                (*cells)[x][y]->rotateLabel(true);
-            }
-            else if(orientation=='d')
-            {
-                (*cells)[x][y]->rotateLabel(true);
-                (*cells)[x][y]->rotateLabel(true);
-            }
+            (*cells)[x][y]->rotateLabel(false);
+
         }
         else if(dir == 'd')
         {
             (*cells)[x][y]->setState(cell :: Road);
             x++;
-            (*cells)[x][y]->setState(cell :: Taxi);
+            if(occupied)
+                (*cells)[x][y]->setState(cell :: OccupiedTaxi);
+            else
+                (*cells)[x][y]->setState(cell :: VacantTaxi);
 
-            if(orientation=='l')
-            {
-                (*cells)[x][y]->rotateLabel(true);
-            }
-            else if(orientation=='r')
-            {
-                (*cells)[x][y]->rotateLabel(false);
-            }
-            else if(orientation=='u')
-            {
-                (*cells)[x][y]->rotateLabel(true);
-                (*cells)[x][y]->rotateLabel(true);
-            }
+            (*cells)[x][y]->rotateLabel(true);
+
         }
         else if(dir=='x')
         {
-            //find path to destination2
-            //if()
             path=findPath(customerDestinationx,customerDestinationy);
             (*cells)[customerLocationx][customerLocationy]->setState(cell :: Pavement);
+            occupied=1;
         }
+        orientation=dir;
     }
     else
     {
-        customerLocationx=customerLocationy=customerDestinationx=customerDestinationy=-1;
-        occupied=0;
+        if(occupied)
+        {
+            customerLocationx=customerLocationy=customerDestinationx=customerDestinationy=-1;
+            occupied=0;
+            (*cells)[x][y]->setState(cell :: VacantTaxi);
+            if(orientation=='r')
+            {
+                (*cells)[x][y]->rotateLabel(true);
+                (*cells)[x][y]->rotateLabel(true);
+                orientation='r';
+            }
+            else if(orientation=='d')
+            {
+                (*cells)[x][y]->rotateLabel(true);
+                orientation='d';
+            }
+            else if(orientation=='u')
+            {
+                (*cells)[x][y]->rotateLabel(false);
+                orientation='u';
+            }
+        }
+
     }
 }
 
