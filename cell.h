@@ -24,6 +24,11 @@ private:
     QPixmap pavPixmap;
     QPixmap taxiPixmap;
     QPixmap customerPixmap;
+signals:
+   void clicked();
+protected:
+   void mousePressEvent(QMouseEvent*);
+
 };
 
 #endif // CELL_H

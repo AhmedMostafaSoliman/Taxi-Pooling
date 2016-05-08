@@ -49,6 +49,7 @@ void cell::ImageUpd(double w,double h)
     //qDebug()<<"w"<<w<<"h"<<h;
 }
 
+
 void cell::rotateLabel(bool clockwise)
 {
     QMatrix rm;
@@ -64,3 +65,7 @@ void cell::rotateLabel(bool clockwise)
 int cell::getCellHeight() {return current_height;}
 int cell::getCellWidth() { return current_width;}
 
+void cell::mousePressEvent(QMouseEvent*)
+{
+    emit clicked();
+}

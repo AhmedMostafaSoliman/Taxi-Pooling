@@ -26,7 +26,11 @@ public:
     void startSimulation();
     void addTaxi(int x,int y);
     void addCustomer(int curx,int cury,int desx,int desy);
+    int startx;
+    int starty;
+    bool f=0;
     DelayThread * thread;
+    std::map<int,std::pair<int,int>>cellMap;
 private:
     std::vector<Taxi *>taxis;
     Ui::MainWindow *ui;
@@ -36,6 +40,7 @@ private:
     QGridLayout* layout;
 public slots:
     void onWakeUp();
+    void onCellClick(int c);
     void resizeEvent(QResizeEvent *event);
 
 };
