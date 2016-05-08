@@ -17,28 +17,32 @@ void Taxi::move()
     {
         char dir=path.top();
         path.pop();
+
         if(dir== 'r')
         {
             (*cells)[x][y]->setState(cell :: Road);
             y++;
-            if(occupied)
+            if(customerDestinationx!=-1)
+                (*cells)[x][y]->setState(cell :: ReservedTaxi);
+            else if(occupied)
                 (*cells)[x][y]->setState(cell :: OccupiedTaxi);
             else
                 (*cells)[x][y]->setState(cell :: VacantTaxi);
 
             (*cells)[x][y]->rotateLabel(true);
             (*cells)[x][y]->rotateLabel(true);
-
-
         }
         else if(dir == 'l')
         {
             (*cells)[x][y]->setState(cell :: Road);
             y--;
-            if(occupied)
+            if(customerDestinationx!=-1)
+                (*cells)[x][y]->setState(cell :: ReservedTaxi);
+            else if(occupied)
                 (*cells)[x][y]->setState(cell :: OccupiedTaxi);
             else
                 (*cells)[x][y]->setState(cell :: VacantTaxi);
+
 
 
         }
@@ -46,10 +50,13 @@ void Taxi::move()
         {
             (*cells)[x][y]->setState(cell :: Road);
             x--;
-            if(occupied)
+            if(customerDestinationx!=-1)
+                (*cells)[x][y]->setState(cell :: ReservedTaxi);
+            else if(occupied)
                 (*cells)[x][y]->setState(cell :: OccupiedTaxi);
             else
                 (*cells)[x][y]->setState(cell :: VacantTaxi);
+
 
             (*cells)[x][y]->rotateLabel(false);
 
@@ -58,10 +65,13 @@ void Taxi::move()
         {
             (*cells)[x][y]->setState(cell :: Road);
             x++;
-            if(occupied)
+            if(customerDestinationx!=-1)
+                (*cells)[x][y]->setState(cell :: ReservedTaxi);
+            else if(occupied)
                 (*cells)[x][y]->setState(cell :: OccupiedTaxi);
             else
                 (*cells)[x][y]->setState(cell :: VacantTaxi);
+
 
             (*cells)[x][y]->rotateLabel(true);
 
@@ -70,6 +80,22 @@ void Taxi::move()
         {
             path=findPath(customerDestinationx,customerDestinationy);
             (*cells)[customerLocationx][customerLocationy]->setState(cell :: Pavement);
+            (*cells)[x][y]->setState(cell :: OccupiedTaxi);
+            if(orientation=='r')
+            {
+                (*cells)[x][y]->rotateLabel(true);
+                (*cells)[x][y]->rotateLabel(true);
+            }
+            else if(orientation=='d')
+            {
+                (*cells)[x][y]->rotateLabel(true);
+            }
+            else if(orientation=='u')
+            {
+                (*cells)[x][y]->rotateLabel(false);
+            }
+
+            customerLocationx=customerLocationy=customerDestinationx=customerDestinationy=-1;
             occupied=1;
         }
         orientation=dir;
@@ -78,24 +104,20 @@ void Taxi::move()
     {
         if(occupied)
         {
-            customerLocationx=customerLocationy=customerDestinationx=customerDestinationy=-1;
             occupied=0;
             (*cells)[x][y]->setState(cell :: VacantTaxi);
             if(orientation=='r')
             {
                 (*cells)[x][y]->rotateLabel(true);
                 (*cells)[x][y]->rotateLabel(true);
-                orientation='r';
             }
             else if(orientation=='d')
             {
                 (*cells)[x][y]->rotateLabel(true);
-                orientation='d';
             }
             else if(orientation=='u')
             {
                 (*cells)[x][y]->rotateLabel(false);
-                orientation='u';
             }
         }
 
@@ -105,8 +127,7 @@ void Taxi::move()
 std::stack<char> Taxi::findPath(int desx,int desy)
 {
    std::stack<char> taxi_path;
-   std::vector<std::vector<cell*>>* g=Grid::getgrid();
-   std::vector<std::vector<cell*>> v=*g;
+   std::vector<std::vector<cell*>> v=*Grid::getgrid();
    int numRows=v.size();
    int numCols=v[0].size();
    std::vector<std::vector<char>>par(numRows,std::vector<char>(numCols,'s'));
@@ -119,7 +140,6 @@ std::stack<char> Taxi::findPath(int desx,int desy)
    {
        int curx = q.front().first,cury=q.front().second; q.pop();
        vis[curx][cury]=1;
-       //qDebug()<<"curx"<<curx<<"cury"<<cury;
 
        /*   r
         * r p r
@@ -127,7 +147,6 @@ std::stack<char> Taxi::findPath(int desx,int desy)
         */
        if((abs(curx-desx)+abs(cury-desy))==1)
        {
-           //qDebug()<<"done";
            while(!q.empty())
                q.pop();
 
@@ -186,6 +205,7 @@ std::stack<char> Taxi::findPath(int desx,int desy)
        }
 
     }
+   return std::stack<char>();
 }
 
 void Taxi::setPath(std::stack<char> p)
