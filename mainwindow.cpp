@@ -3,7 +3,7 @@
 #include <iostream>
 #include <QDebug>
 #include <QResizeEvent>
-#include <QSignalMapper>:
+#include <QSignalMapper>
 
 
 MainWindow::MainWindow(QWidget *parent) :
