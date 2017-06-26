@@ -2,8 +2,7 @@
 
 This project was developed as part of the **CSE 323 Algorithms and Data Structures course**  ,Faculty Of Engineering Ain Shams University, Cairo, Egypt.
 
-
-![Snapshot](https://github.com/AhmedMostafaSoliman/Taxi-Pooling/blob/master/taxi.png "Snapshot 1")
+![Snapshot](http://i.imgur.com/08U5MZw.png "Snapshot 1")
 
 ## Usage
 - git clone https://github.com/AhmedMostafaSoliman/Taxi-Pooling.git
