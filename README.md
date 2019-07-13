@@ -5,9 +5,9 @@ This project was developed as part of the **CSE 323 Algorithms and Data Structur
 ![Snapshot](http://i.imgur.com/08U5MZw.png "Snapshot 1")
 
 ## Usage
-- git clone https://github.com/AhmedMostafaSoliman/Taxi-Pooling.git
+- `git clone https://github.com/AhmedMostafaSoliman/Taxi-Pooling.git`
 - Open **Taxi-Pooling.pro** using _Qt_ 
-- Run **qmake**
+- Run `qmake`
 - Build
 - Run 
 
